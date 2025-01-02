@@ -4,6 +4,6 @@ import { daysCheks, getDay } from '../controllers/dayCheckController.js';
 const router = express.Router()
 
 router.post('/daycheck', daysCheks)
-router.get('/', getDay)
+router.get('/:dayId', getDay)
 
 export default router

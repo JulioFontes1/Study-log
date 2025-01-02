@@ -5,11 +5,10 @@ import { run } from "./db/db.connection.js"
 
 import userRouter from './routers/userRouters.js'
 import daysRouter from './routers/daysRouters.js'
-import job from "./services/failure.js";
+import { job } from "./services/failure.js";
+
 
 export const app = express();
-run()
-
 
 
 app.use(express.json())
