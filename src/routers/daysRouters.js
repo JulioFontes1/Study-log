@@ -1,30 +1,9 @@
-import { User } from "../db/user.db.schema.js"
-import { daysCount } from "../db/dayCheck.schema.js";
+import express from 'express';
+import { daysCheks, getDay } from '../controllers/dayCheckController.js';
 
-const daysCheks = async (req, res) => {
-  try {
-    const { summary, status, user } = req.body;
+const router = express.Router()
 
-    const newDayCheck = new daysCount({ summary, status, user });
+router.post('/daycheck', daysCheks)
+router.get('/', getDay)
 
-    await newDayCheck.save();
-
-    return res.status(201).json({ message: 'Dia registrado com sucesso!' })
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const getDay = async (req, res) => {
-  try {
-    const { userId, dayId } = req.params
-    const { summary } = req.body
-    const day = await daysCount.findById(dayId)
-
-    res.send(day)    
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-export { daysCheks, getDay }
+export default router
