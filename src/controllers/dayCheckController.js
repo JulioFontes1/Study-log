@@ -1,7 +1,10 @@
+import jwt from "jsonwebtoken"
+
 import { User } from "../models/user.db.schema.js";
 import { daysCount } from "../models/dayCheck.schema.js";
 
 import currentDate from "../services/currentDate.js";
+import { checkToken } from "../middleware/jwt.middleware.js";
 
 const daysCheks = async (req, res) => {
   const date = currentDate();
@@ -36,5 +39,7 @@ const getDay = async (req, res) => {
     console.log(error);
   }
 };
+
+
 
 export { daysCheks, getDay };

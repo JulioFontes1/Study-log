@@ -1,9 +1,10 @@
 import { User } from "../models/user.db.schema.js";
+import jwt from "jsonwebtoken";
 
 const userCadasters = async (req, res) => {
   try {
     const { userName, email, password } = req.body;
-
+    
     const usersName = await User.findOne({ userName: userName });
     const usersEmail = await User.findOne({ email: email });
 
@@ -15,29 +16,35 @@ const userCadasters = async (req, res) => {
     const newUser = new User({ userName, email, password });
     await newUser.save();
 
-    return res.status(201).json({ message: "Usuário criado com sucesso" });
+    return res.status(201).send("Usuário criado com sucesso");
   } catch (error) {
     console.log(error);
   }
 };
 
 const userLogin = async (req, res) => {
+
+  const secret = process.env.SECRET
+
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email: email });
+    
 
-    if (!user) {
-      return res.status(400).send("Email incorreto");
-    }
-
+    const user = await User.findOne({ email });
     const isMatch = await user.comparePassword(password);
 
-    if (!isMatch) {
-      return res.status(400).send("Senha incorreta");
+
+    if (!user || !isMatch) {
+      return res.status(400).send("Credenciais incorretas");
     }
 
-    res.status(200).send("Usuário Logado");
+
+    let token = jwt.sign({
+      id: user._id
+    }, secret, { expiresIn: '3h' })
+
+    res.status(200).json( {msg: "Usuário Logado", token, userId: user._id, name: user.userName} );
   } catch (error) {
     console.log(error);
 
@@ -45,4 +52,8 @@ const userLogin = async (req, res) => {
   }
 };
 
-export { userCadasters, userLogin };
+const validation = async (req, res) => {
+  res.status(200).send("Token válido")
+}
+
+export { userCadasters, userLogin, validation };
