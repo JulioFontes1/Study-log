@@ -10,6 +10,7 @@ const daysCheks = async (req, res) => {
   const date = currentDate();
   try {
     const { summary, status, user } = req.body;
+    console.log(summary)
 
     const days = await daysCount.find({ user });
 
@@ -30,16 +31,35 @@ const daysCheks = async (req, res) => {
 
 const getDay = async (req, res) => {
   try {
-    const { userId, dayId } = req.params;
-    const { summary } = req.body;
-    const day = await daysCount.findById(dayId);
+    const userId = req.params.userId;
 
-    res.send(day);
+    const days = await daysCount.find({ user: userId})
+    res.json({days});
   } catch (error) {
     console.log(error);
   }
 };
 
+const getOneDay = async (req, res) => {
+  const { userId, day } = req.params;
+
+  try {
+    const userConnected = await User.findById(userId)
+    const allDays = await daysCount.find({ user: userId })
+
+    const currentDate = await allDays.find((e) => {return e.date.getDate() == parseInt(day)})
+
+    if(!currentDate){
+      res.status(400).json({msg: "Dia não registrado"})
+      return
+    }
+
+    res.status(200).json({msg: currentDate})
+
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 
-export { daysCheks, getDay };
+export { daysCheks, getDay, getOneDay };

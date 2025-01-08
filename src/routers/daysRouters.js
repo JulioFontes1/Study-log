@@ -1,10 +1,12 @@
 import express from 'express';
-import { daysCheks, getDay } from '../controllers/dayCheckController.js';
+import { daysCheks, getDay, getOneDay } from '../controllers/dayCheckController.js';
 import { checkToken } from '../middleware/jwt.middleware.js'
 
 const router = express.Router()
 
 router.post('/daycheck', daysCheks)
-router.get('/:dayId', checkToken, getDay)
+router.get('/:userId', checkToken, getDay)
+router.get('/:userId/:day', checkToken, getOneDay) // Falta criar o controller
+
 
 export default router

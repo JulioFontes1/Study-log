@@ -36,7 +36,7 @@ const userLogin = async (req, res) => {
 
 
     if (!user || !isMatch) {
-      return res.status(400).send("Credenciais incorretas");
+      return res.status(400).json({msg: "Credenciais incorretas"});
     }
 
 
@@ -53,7 +53,7 @@ const userLogin = async (req, res) => {
 };
 
 const validation = async (req, res) => {
-  res.status(200).send("Token válido")
+  res.status(200).json({msg: "Token válido"})
 }
 
 export { userCadasters, userLogin, validation };
