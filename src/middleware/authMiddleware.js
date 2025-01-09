@@ -3,7 +3,7 @@ import  jwt from "jsonwebtoken";
 
 dotenv.config();
 
-const checkToken = (req, res, next) => {
+const authenticateToken  = (req, res, next) => {
   const token = req.headers['authorization']
 
   if(!token){
@@ -20,4 +20,4 @@ const checkToken = (req, res, next) => {
   }
 }
 
-export { checkToken }
+export { authenticateToken }

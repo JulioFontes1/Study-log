@@ -1,12 +1,12 @@
 import express from 'express'
-import { userLogin, userCadasters, validation } from '../controllers/userController.js'
+import { loginUser, registerUser, validateToken } from '../controllers/userController.js'
 
-import { checkToken } from '../middleware/jwt.middleware.js'
+import { authenticateToken } from '../middleware/authMiddleware.js'
 const router = express.Router()
 
-router.post('/register', userCadasters)
-router.post('/login', userLogin)
-router.post('/validation', checkToken, validation)
+router.post('/register', registerUser)
+router.post('/login', loginUser)
+router.post('/validation', authenticateToken, validateToken)
 
 
 export default router

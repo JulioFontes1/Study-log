@@ -1,11 +1,11 @@
-import { User } from "../models/user.db.schema.js"
-import { daysCount } from "../models/dayCheck.schema.js";
+import { User } from "../models/userModel.js"
+import { daysCount } from "../models/dayCheckModel.js";
 import { CronJob } from "cron";
 
-import currentDate from "./currentDate.js";
+import { getNormalizedCurrentDate } from "./getCurrentDate.js";
 
-const checkFailure = async () => {
-  const date = currentDate()
+const registerMissedDayCheck = async () => {
+  const date = getNormalizedCurrentDate()
   try {
     const allUsers = await User.find()
 
@@ -45,7 +45,7 @@ const checkFailure = async () => {
 
 const job = new CronJob(
 	'59 59 23 * * *', 
-	() => checkFailure()
+	() => registerMissedDayCheck()
 );
 
 

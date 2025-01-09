@@ -1,7 +1,7 @@
-import { User } from "../models/user.db.schema.js";
+import { User } from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 
-const userCadasters = async (req, res) => {
+const registerUser = async (req, res) => {
   try {
     const { userName, email, password } = req.body;
     
@@ -18,11 +18,11 @@ const userCadasters = async (req, res) => {
 
     return res.status(201).send("Usuário criado com sucesso");
   } catch (error) {
-    console.log(error);
+    console.error("Erro na requisição");
   }
 };
 
-const userLogin = async (req, res) => {
+const loginUser = async (req, res) => {
 
   const secret = process.env.SECRET
 
@@ -32,7 +32,7 @@ const userLogin = async (req, res) => {
     
 
     const user = await User.findOne({ email });
-    const isMatch = await user.comparePassword(password);
+    const isMatch = await user.comparePassword(password)
 
 
     if (!user || !isMatch) {
@@ -46,14 +46,14 @@ const userLogin = async (req, res) => {
 
     res.status(200).json( {msg: "Usuário Logado", token, userId: user._id, name: user.userName} );
   } catch (error) {
-    console.log(error);
+    console.error("Erro na requisição");
 
     res.status(500).send("Erro do servidor");
   }
 };
 
-const validation = async (req, res) => {
+const validateToken = async (req, res) => {
   res.status(200).json({msg: "Token válido"})
 }
 
-export { userCadasters, userLogin, validation };
+export { registerUser, loginUser, validateToken };

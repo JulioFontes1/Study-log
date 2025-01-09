@@ -3,17 +3,14 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-async function run() {
+async function connectDataBase() {
 
   try {
-    // mongoose.set('debug', true);
     await mongoose.connect(process.env.DATA_BASE_KEY);
     console.log("Connected");
   } catch (error) {
-    console.log(error)
+    console.error("Erro na conexão");
   }
 }
 
-run()
-
-export { run };
+export { connectDataBase };

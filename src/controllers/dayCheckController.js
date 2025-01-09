@@ -1,16 +1,11 @@
-import jwt from "jsonwebtoken"
+import { daysCount } from "../models/dayCheckModel.js";
 
-import { User } from "../models/user.db.schema.js";
-import { daysCount } from "../models/dayCheck.schema.js";
+import { getNormalizedCurrentDate, getDayAndMonth} from "../services/getCurrentDate.js";
 
-import currentDate from "../services/currentDate.js";
-import { checkToken } from "../middleware/jwt.middleware.js";
-
-const daysCheks = async (req, res) => {
-  const date = currentDate();
+const registerDayCheck = async (req, res) => {
+  const date = getNormalizedCurrentDate();
   try {
     const { summary, status, user } = req.body;
-    console.log(summary)
 
     const days = await daysCount.find({ user });
 
@@ -25,29 +20,31 @@ const daysCheks = async (req, res) => {
 
     return res.status(201).json({ message: "Dia registrado com sucesso!" });
   } catch (error) {
-    console.log(error);
+    console.error("Erro na requisição");
   }
 };
 
-const getDay = async (req, res) => {
+const getAllDaysByUser = async (req, res) => {
   try {
     const userId = req.params.userId;
 
     const days = await daysCount.find({ user: userId})
     res.json({days});
   } catch (error) {
-    console.log(error);
+    console.error("Erro na requisição");
   }
 };
 
-const getOneDay = async (req, res) => {
+const getDayByDate = async (req, res) => {
   const { userId, day } = req.params;
 
   try {
-    const userConnected = await User.findById(userId)
     const allDays = await daysCount.find({ user: userId })
 
-    const currentDate = await allDays.find((e) => {return e.date.getDate() == parseInt(day)})
+
+    const normalizedDate = new Date(getDayAndMonth(day))
+    
+    const currentDate = await allDays.find((e) => {return e.date.toISOString() === normalizedDate.toISOString()})
 
     if(!currentDate){
       res.status(400).json({msg: "Dia não registrado"})
@@ -57,9 +54,9 @@ const getOneDay = async (req, res) => {
     res.status(200).json({msg: currentDate})
 
   } catch (error) {
-    console.log(error)
+    console.error("Erro na requisição");
   }
 }
 
 
-export { daysCheks, getDay, getOneDay };
+export { registerDayCheck, getAllDaysByUser, getDayByDate };
