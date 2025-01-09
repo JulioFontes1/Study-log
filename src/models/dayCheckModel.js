@@ -10,3 +10,4 @@ const dayCheckSchema = new mongoose.Schema({
 const daysCount = mongoose.model("daysChecks", dayCheckSchema);
 
 export { daysCount };
+ 
