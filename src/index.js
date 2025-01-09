@@ -17,6 +17,6 @@ app.use(cors());
 app.use('/user', userRouter)
 app.use('/day', daysRouter)
 
-app.listen(3000, () => console.log("Started"));
+app.listen(process.env.PORT || 3000, () => console.log("Started"));
 connectDataBase()
 job.start()
