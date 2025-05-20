@@ -29,7 +29,7 @@ const getAllDaysByUser = async (req, res) => {
     const userId = req.params.userId;
 
     const days = await daysCount.find({ user: userId})
-    res.json({days});
+    res.status(200).json({ message: days });
   } catch (error) {
     console.error("Erro na requisição");
   }

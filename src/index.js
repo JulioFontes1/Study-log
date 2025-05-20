@@ -13,9 +13,11 @@ export const app = express();
 
 app.use(express.json())
 app.use(cors());
-
 app.use('/user', userRouter)
 app.use('/day', daysRouter)
+app.get("/", (req, res) => {
+  res.send("Olá")
+})
 
 app.listen(process.env.PORT || 3000, () => console.log("Started"));
 connectDataBase()

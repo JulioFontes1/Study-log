@@ -22,6 +22,13 @@ const registerUser = async (req, res) => {
   }
 };
 
+const getUsers = async(req, res) => {
+  const userName = await User.find()
+
+  return res.send(userName)
+
+}
+
 const loginUser = async (req, res) => {
 
   const secret = process.env.SECRET
@@ -56,4 +63,4 @@ const validateToken = async (req, res) => {
   res.status(200).json({msg: "Token válido"})
 }
 
-export { registerUser, loginUser, validateToken };
+export { registerUser, loginUser, validateToken, getUsers };
